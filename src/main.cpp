@@ -73,7 +73,7 @@ void setup () {
   configTime(GMT_OFFSET_SEC, DAYLIGHT_OFFSET_SEC, NTP_SERVER);
 
   // Set timezone
-  setenv("TZ", TZ, 1);
+  //setenv("TZ", TZ, 1);
 
   // Init external RTC
   if (! rtc.begin()) {
@@ -110,7 +110,7 @@ void syncTime() {
     timeinfo.tm_year + 1900,
     timeinfo.tm_mon + 1,
     timeinfo.tm_mday,
-    timeinfo.tm_hour,
+    timeinfo.tm_hour - 1,
     timeinfo.tm_min,
     timeinfo.tm_sec
   );
