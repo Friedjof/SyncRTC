@@ -41,12 +41,14 @@
 // Replace with your network credentials
 #define WIFI_SSID "<your wifi ssid>"         // <--- Change this
 #define WIFI_PASSWORD "<your wifi password>" // <--- Change this
+
 // Replace with your NTP server
 #define NTP_SERVER "pool.ntp.org"            // <--- Change this
-#define TZ "GMT-1"                           // <--- Change this
+
 // Offset in seconds to match your timezone
-#define GMT_OFFSET_SEC 0
-#define DAYLIGHT_OFFSET_SEC 3600
+#define GMT_OFFSET_SEC 3600                  // <--- Change this
+#define DAYLIGHT_OFFSET_SEC 0
+
 #define SERIAL_BAUD 115200
 
 // Function prototypes
@@ -71,9 +73,6 @@ void setup () {
   
   // Sync time with NTP server
   configTime(GMT_OFFSET_SEC, DAYLIGHT_OFFSET_SEC, NTP_SERVER);
-
-  // Set timezone
-  //setenv("TZ", TZ, 1);
 
   // Init external RTC
   if (! rtc.begin()) {
@@ -110,7 +109,7 @@ void syncTime() {
     timeinfo.tm_year + 1900,
     timeinfo.tm_mon + 1,
     timeinfo.tm_mday,
-    timeinfo.tm_hour - 1,
+    timeinfo.tm_hour,
     timeinfo.tm_min,
     timeinfo.tm_sec
   );
