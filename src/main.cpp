@@ -56,8 +56,9 @@
 //#define TZ "GMT-1"
 
 // Offset in seconds to match your timezone
-#define GMT_OFFSET_SEC 0
-#define DAYLIGHT_OFFSET_SEC 3600
+#define GMT_OFFSET_SEC 3600                  // <--- Change this
+#define DAYLIGHT_OFFSET_SEC 0
+
 #define SERIAL_BAUD 115200
 
 // Function prototypes
@@ -122,7 +123,7 @@ void syncTime() {
     timeinfo.tm_year + 1900,
     timeinfo.tm_mon + 1,
     timeinfo.tm_mday,
-    timeinfo.tm_hour,
+    timeinfo.tm_hour + 1,
     timeinfo.tm_min,
     timeinfo.tm_sec
   );
