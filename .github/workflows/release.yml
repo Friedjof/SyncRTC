@@ -44,5 +44,6 @@ jobs:
         tag: ${{ github.ref }}
         files: >
           binaries/esp32dev/
+          binaries/esp32s3/
           binaries/esp8266/
         gzip: folders
