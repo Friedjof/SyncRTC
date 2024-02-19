@@ -3,7 +3,7 @@
 | ESP32 NTP RTC                                                                             |
 |                                                                                           |
 | This code is in the public domain.                                                        |
-| Written by Friedjof Noweck - 2023                                                         |
+| Written by Friedjof Noweck - 2024                                                         |
 +-------------------------------------------------------------------------------------------+ 
 | With this code you can sync the time of an external RTC with the time of an NTP server.   |
 | Get ready to sync time with NTP server:                                                   |
@@ -21,8 +21,8 @@
 | Connect the external RTC to your ESP32:                                                   |
 | - SDA RTC -> pin 21 ESP32                                                                 |
 | - SCL RTC -> pin 22 ESP32                                                                 |
-| - VCC RTC -> 3.3V ESP32                                                                   |
-| - GND RTC -> GND ESP32                                                                    |
+| - VCC RTC -> 3.3V   ESP32                                                                 |
+| - GND RTC -> GND    ESP32                                                                 |
 +-------------------------------------------------------------------------------------------+ 
 | Sync time with NTP server:                                                                |
 | 1. Call syncTime() to sync time with NTP server                                           |
@@ -33,17 +33,28 @@
 
 #include <Arduino.h>
 #include <Wire.h>
+
+#ifdef ESP32DEV
 #include <WiFi.h>
+#else
+#include <ESP8266WiFi.h>
+#endif
+
 #include <SPI.h>
 #include "time.h"
 #include "RTClib.h"
 
-// Replace with your network credentials
-#define WIFI_SSID "<your wifi ssid>"         // <--- Change this
-#define WIFI_PASSWORD "<your wifi password>" // <--- Change this
+#include "ConfigManager.h"
+
+
+// This section is deprecated. You can now use the config.json file to store your credentials
+
+//#define WIFI_SSID "<your wifi ssid>"
+//#define WIFI_PASSWORD "<your wifi password>"
 // Replace with your NTP server
-#define NTP_SERVER "pool.ntp.org"            // <--- Change this
-#define TZ "GMT-1"                           // <--- Change this
+//#define NTP_SERVER "pool.ntp.org"
+//#define TZ "GMT-1"
+
 // Offset in seconds to match your timezone
 #define GMT_OFFSET_SEC 0
 #define DAYLIGHT_OFFSET_SEC 3600
@@ -56,6 +67,7 @@ void logNTP();
 
 // Init external RTC
 RTC_DS3231 rtc;
+ConfigManager configManager;
 
 void setup () {
   // Init serial connection
@@ -63,17 +75,17 @@ void setup () {
   while (!Serial);
 
   // connect to wifi
-  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+  WiFi.begin(configManager.get_wifi_ssid(), configManager.get_wifi_password());
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.println("Connecting to WiFi..");
   }
   
   // Sync time with NTP server
-  configTime(GMT_OFFSET_SEC, DAYLIGHT_OFFSET_SEC, NTP_SERVER);
+  configTime(GMT_OFFSET_SEC, DAYLIGHT_OFFSET_SEC, configManager.get_ntp_server());
 
   // Set timezone
-  setenv("TZ", TZ, 1);
+  setenv("TZ", configManager.get_ntp_tz(), 1);
 
   // Init external RTC
   if (! rtc.begin()) {

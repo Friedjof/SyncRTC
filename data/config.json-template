@@ -1,0 +1,10 @@
+{
+    "wifi": {
+        "ssid": "<ssid>",
+        "password": "<password>"
+    },
+    "ntp": {
+        "server": "pool.ntp.org",
+        "tz": "GMT-2"
+    }
+}

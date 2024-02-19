@@ -6,6 +6,12 @@ With the NTP server the RTC can be synchronized to the current time. For this we
 
 After flashing the ESP32 with the code, the ESP32 will wait for a serial connection. The ESP32 will then try to connect to the WiFi network. If the connection is successful, the ESP32 will initialize the RTC. In the main loop the ESP will log the current time of the external rtc and the internal rtc. Then the ESP32 will try to synchronize the external RTC with the internal RTC. After the synchronization the ESP32 will wait for one second and the loop will start again.
 
+## RTC Connection
+* SCL -> GPIO 22
+* SDA -> GPIO 21
+* VCC -> 3.3V
+* GND -> GND
+
 ## Hardware
 * ESP32 development board
 * USB cable
